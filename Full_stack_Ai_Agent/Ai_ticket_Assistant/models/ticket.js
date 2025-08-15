@@ -16,7 +16,7 @@ const ticketSchema = new mongoose.Schema({
     priority:String,
     deadline:Date,
     helpfulNotes:String,
-    relatedSkill:[String],
+    relatedSkills:[String],
     createdAt:{
         type:Date,
         default:Date.now
