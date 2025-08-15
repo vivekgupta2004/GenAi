@@ -1,0 +1,81 @@
+# -----------------------------
+# Node / General
+# -----------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json.#*
+yarn.lock.#*
+
+# Process IDs
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Logs
+logs/
+*.log
+*.log.*
+npm-cache/
+.npm/
+.cache/
+.tmp/
+
+# Coverage / Testing
+coverage/
+.nyc_output/
+jest-html-reporters-*
+test-results/
+.tap/
+
+# TypeScript build
+dist/
+build/
+*.tsbuildinfo
+
+# Source maps (optional)
+*.map
+
+# Env files (keep example)
+.env
+.env.*
+!.env.example
+
+# Uploads / temp files (keep placeholder)
+uploads/
+!uploads/.gitkeep
+tmp/
+temp/
+
+# PM2
+.pm2/
+
+# Prisma / SQLite (if used)
+prisma/dev.db
+prisma/dev.db-journal
+
+# Mongo dumps (optional)
+dump/
+
+# Editor / OS junk
+.vscode/
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Docker (optional)
+docker-data/
+
+# ESLint / Prettier caches
+.eslintcache
+.prettier-cache/
+
+# Parcel / Vite / SWC / Babel caches
+.parcel-cache/
+.vite/
+.swc/
+babel-cache/
