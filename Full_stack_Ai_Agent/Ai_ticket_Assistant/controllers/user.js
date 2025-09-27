@@ -1,47 +1,73 @@
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import User from "../models/user.js"
 import { inngest } from '../inngest/client.js'
 
 export const signup = async (req, res) => {
-    const { email, password, skills = [] } = req.body
+    const { email, password, skills = [] } = req.body;
     try {
-        const hashed = bcrypt.hash(password, 10)
-        const user = User.create({
+       
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+       
+        const newUser = await User.create({
             email,
-            password: hashed,
+            password: hashedPassword, 
             skills
-        })
+        });
 
         await inngest.send({
             name: "user/signup",
             data: {
-                email
+                email: newUser.email, 
+                userId: newUser._id 
             }
-        })
-
+        });
 
         const token = jwt.sign(
             {
-                _id: (await user)._id,
-                role: (await user).role,
+                _id: newUser._id,
+                role: newUser.role,
             },
-            process.env.JWT_SECRET
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' } 
+        );
 
-        )
-        res.json({
-            user,
+        res.status(201).json({ 
+            user: {
+                _id: newUser._id,
+                email: newUser.email,
+                skills: newUser.skills,
+                role: newUser.role 
+            },
             token
-        })
+        });
 
     } catch (error) {
-        res.status(500).json({
-            error: "Sign Up faild",
-            details: error.message
+        
+        console.error("Signup failed:", error);
 
-        })
+       
+        if (error.name === 'ValidationError') {
+            return res.status(400).json({
+                error: "Validation failed",
+                details: error.message
+            });
+        }
+        
+        if (error.code === 11000) {
+            return res.status(409).json({
+                error: "Email already registered",
+                details: "A user with this email already exists."
+            });
+        }
+
+        res.status(500).json({
+            error: "Signup failed",
+            details: error.message
+        });
     }
-}
+};
 export const login = async (req, res) => {
     const { email, password } = req.body;
     try {
